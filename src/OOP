@@ -1,0 +1,131 @@
+OOP
+	Naming Conventions in Java
+		Class - noun
+		interface - adjective -  Try to use ‘able’ at the end
+		Methods - verb of oe word,  multi-word, that begins with a verb in lowercase followed by an adjective, noun…
+		Variable
+			Common names for temporary variables are i, j, k, m, and n for integers; c, d, and e for characters
+		Packages
+			The prefix of a unique package name is always written in all-lowercase ASCII letters and should be one of the top-level domain names, like com, edu, gov, mil, net, org.
+			Subsequent components of the package name vary according to an organization’s own internal naming conventions.
+		Do look out for these exceptions cases to camel casing in java as follows:
+			In package, everything is small even while we are combining two or more words in java
+			In constants, we do use everything as uppercase and only ‘_’ character is used even if we are combining two or more words in java.
+	Access Modifiers
+		types
+			public
+			protected
+			private
+			default
+		Important Points
+			If other programmers use your class, try to use the most restrictive access level that makes sense for a particular member. Use private unless you have a good reason not to.
+			Avoid public fields except for constants.
+	OOPS concepts are as follows:
+		1. Class
+			What is class
+			declarations
+				1. Modifiers
+				2. Class keyword
+				3. Class name
+				4. Superclass
+				5. Interfaces
+				6. Body
+			Properties
+			1. Class is not a real-world entity. It is just a template or blueprint or prototype from which objects are created.
+			2. Class does not occupy memory.
+			3. Class is a group of variables of different data types and a group of methods.
+			4. A Class in Java can contain:
+				Data member
+				Method
+				Constructor
+				Nested Class
+				Interface
+			declarations components
+			There are various types of classes that are used in real-time applications such as nested classes, anonymous classes, and lambda expressions.
+		2. Object
+			When an object of a class is created, the class is said to be instantiated
+			we can’t create objects of an abstract class or an interface.
+			initiliaze object
+				1. with new keyword
+				2. by using method/function
+				3. Test obj = (Test)Class.forName("com.p1.Test").newInstance();
+				4. clone method
+					ClassName obj2 = (ClassName)obj1.clone();
+					* we need implements Cloneable and override clone method
+						class ClassName implements Cloneable {
+						@Override
+						protected Object clone() throws CloneNotSupportedException {
+							return super.clone();
+						}
+				5. Deserialization
+					De-serialization is a technique of reading an object from the saved state in a file.
+					FileInputStream file = new FileInputStream(filename);
+					ObjectInputStream in = new ObjectInputStream(file);
+					Object obj = in.readObject();
+			consists of :
+				1. State: It is represented by the attributes of an object. It also reflects the properties of an object.
+				2. Behavior: It is represented by the methods of an object. It also reflects the response of an object to other objects.
+				3. Identity: It is a unique name given to an object that enables it to interact with other objects.
+			The objects that are not referenced anymore will be destroyed by the Garbage Collector of Java.
+			In the inheritance system, we use a parent class reference variable to store a sub-class object. 	ParentClass obj = new SubClass()
+			difference object & class
+				Class is the blueprint of an object. It is used to create objects.	An object is an instance of the class.
+				A classNo memory is allocated when a class is declared.	An object Memory is allocated as soon as an object is created.
+				A class is a group of similar objects.	An object is a real-world entity such as a book, car, etc.
+				Class is a logical entity.	An object is a physical entity.
+				A class can only be declared once.	Objects can be created many times as per requirement.
+		3. Method and method passing
+			Advantage of Method
+				Code Reusability
+				Code Optimization
+			method components
+				1. access modifier (Optional)
+				2. return type (Mandatory)
+				3. method name (Mandatory)
+				4. parameter list (Optional)
+				5. exception list (Optional)
+				6. method body (Optional)
+			Types
+				1. Predefined Method - standard library method or built-in method
+				2. User-defined Method
+			Create ways
+				1. Instance Method
+				2. Static Method
+			Method Signature
+				It consists of the method name and a parameter list (number of parameters, type of the parameters, and order of the parameters). The return type and exceptions are not considered as part of it.
+			There can be three situations when a method is called
+				It completes all the statements in the method
+				It reaches a return statement
+				Throws an exception
+			several advantages
+				Reusability
+				Abstraction
+				Improved readability
+				Encapsulation
+				Separation of concerns
+				Improved modularity
+				Improved testability
+				Improved performance
+			Methods calls are implemented through a stack.
+	Constructors
+		special method that is used to initialize objects
+		default contructor (call super())
+		Different From Java Methods
+			Constructors must have the same name as the class within which it is defined it is not necessary for the method in Java.
+			Constructors do not return any type while method(s) have the return type or void if does not return any value.
+			Constructors are called only once at the time of Object creation while method(s) can be called any number of times.
+		The first line of a constructor is a call to super() or this(), (a call to a constructor of a super-class or an overloaded constructor), if you don’t type in the call to super in your constructor the compiler will provide you with a non-argument call to super at the first line of your code, the super constructor must be called to create an object
+		Rules for writing constructors
+			The constructor(s) of a class must have the same name as the class name in which it resides.
+			A constructor in Java can not be abstract, final, static, or Synchronized.
+			Access modifiers can be used in constructor declaration to control its access i.e which other class can call the constructor.
+		Types
+			Default Constructor - Default constructor provides the default values to the object like 0, null, etc. depending on the type.
+			Parameterized Constructor
+			Copy Constructor
+				Unlike other constructors copy constructor is passed with another object which copies the data available from the passed object to the newly created object.
+				In Java,there is no such inbuilt copy constructor available like in other programming languages such as C++, instead we can create our own copy constructor by passing the object of the same class to the other instance(object) of the class.
+				Geek(Geek obj2){
+					this.name = obj2.name;
+				}
+		constructor can be declared private. A private constructor is used in restricting object creation.
