@@ -1,0 +1,9 @@
+2 olculu massivin vurulmasi
+M, N, A, S herfleri iki olculu massivle yazmaq
+User  - Employer id, code, name, profession, salary Client id, code, name
+AddUser()
+AddAccount()
+getAccounList()
+Account  field -> User
+set Account check User is exist?
+next lesson Purchase,Credit

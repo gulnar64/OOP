@@ -1,11 +1,13 @@
 package edu.secondpackage;
 
+import edu.mypackage.Alive;
 import edu.mypackage.Person;
 
 public class Child extends Person{
 
     public static void main(String[] args) {
         Child child = new Child();
-        System.out.println(child.protectedVariable);
+        child.setAge(10);
+        System.out.println(child.getAge());
     }
 }

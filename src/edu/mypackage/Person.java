@@ -1,6 +1,19 @@
 package edu.mypackage;
 
 public class Person {
+    private int age;
+
+    public void setAge(int age) {
+
+        System.out.println("set age call");
+        this.age = age;
+    }
+
+    public int getAge() {
+        System.out.println("get age call");
+        return age * 100 / 20;
+    }
+
     private int privateVariable;
     int defaultVariable;
     protected int protectedVariable = 3;
@@ -9,6 +22,10 @@ public class Person {
     public Person(int defaultVariable) {
         System.out.println("super i parameter");
         this.defaultVariable = defaultVariable;
+    }
+
+    public static Person getPerson() {
+        this;
     }
 
     public Person() {
@@ -28,7 +45,7 @@ public class Person {
     }
 
     public void publicMethod() {
-        System.out.println("this is public method");
+        System.out.println("this is public method in parent class");
     }
 
     public static void main(String[] args) {

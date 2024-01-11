@@ -1,4 +1,4 @@
-OOP
+﻿OOP
 	Naming Conventions in Java
 		Class - noun
 		interface - adjective -  Try to use ‘able’ at the end
@@ -423,3 +423,173 @@ OOP
         				Enum type can be passed as an argument to switch statements.
         				Every enum constant is always implicitly public static final. Since it is static, we can access it by using the enum Name. Since it is final, we can’t create child enums.
         				We can declare the main() method inside the enum. Hence we can invoke the enum directly from the Command Prompt.
+	Memory
+		Management
+			 major concepts in Java Memory Management :
+				JVM Memory Structure
+					Some of the areas are created by the JVM whereas some are created by the threads that are used in a program. However, the memory area created by JVM is destroyed only when the JVM exits. The data areas of thread are created during instantiation and destroyed when the thread exits.
+					Java memory area parts / memory in the JVM is divided into 5 different parts:
+						Heap
+							It is a shared runtime data area and stores the actual object in a memory. It is instantiated during the virtual machine startup.
+							Heap can be of fixed or dynamic size depending upon the system’s configuration.
+							There exists one and only one heap for a running JVM process
+						Class (Method) area
+							It is a logical part of the heap area and is created on virtual machine startup.
+							This memory is allocated for class structures, method data and constructor field data, and also for interfaces or special method used in class. Heap can be of fixed or dynamic size depending upon the system’s configuration.
+							Can be of a fixed size or expanded as required by the computation. Needs not to be contiguous.
+							Note: Though method area is logically a part of heap, it may or may not be garbage collected even if garbage collection is compulsory in heap area.
+						Jvm stack
+							A stack is created at the same time when a thread is created and is used to store data and partial results which will be needed while returning value for method and performing dynamic linking.
+							Stacks can either be of fixed or dynamic size. The size of a stack can be chosen independently when it is created.
+							The memory for stack needs not to be contiguous.
+						Native method stack
+							Also called as C stacks, native method stacks are not written in Java language. This memory is allocated for each thread when its created. And it can be of fixed or dynamic nature.
+						Ps registers
+							Each JVM thread which carries out the task of a specific method has a program counter register associated with it. The non native method has a PC which stores the address of the available JVM instruction whereas in a native method, the value of program counter is undefined. PC register is capable of storing the return address or a native pointer on some specific platform.
+		Garbage collector
+			JVM triggers this process and as per the JVM garbage collection process is done or else withheld. It reduces the burden of programmer by automatically performing the allocation or deallocation of memory.
+			Garbage collection process causes the rest of the processes or threads to be paused and thus is costly in nature. This problem is unacceptable for the client but can be eliminated by applying several garbage collector based algorithms. This process of applying algorithm is often termed as Garbage Collector tuning and is important for improving the performance of a program.
+			Another solution is the generational garbage collectors that adds an age field to the objects that are assigned a memory. As more and more objects are created, the list of garbage grows thereby increasing the garbage collection time. On the basis of how many clock cycles the objects have survived, objects are grouped and are allocated an ‘age’ accordingly. This way the garbage collection work gets distributed.
+			In the current scenario, all garbage collectors are generational, and hence, optimal.
+			The main objective of Garbage Collector is to free heap memory by destroying unreachable objects.
+			The garbage collector is the best example of the Daemon thread as it is always running in the background.
+			The garbage collection implementation lives in the JVM
+			Eligibility for garbage collection: An object is said to be eligible for GC(garbage collection) if it is unreachable.
+			four ways to make an object eligible
+				Nullifying the reference variable
+				Re-assigning the reference variable
+				An object created inside the method
+				Island of Isolation
+			two Ways for requesting JVM to run Garbage Collector
+				Using System.gc() method: System class contain static method gc() for requesting JVM to run Garbage Collector.
+				Using Runtime.getRuntime().gc() method: Runtime class allows the application to interface with the JVM in which the application is running.
+				key points
+					There is no guarantee that any of the above two methods will run Garbage Collector.
+					The call System.gc() is effectively equivalent to the call : Runtime.getRuntime().gc()
+			Types of Activities
+				Minor or incremental Garbage Collection: It is said to have occurred when unreachable objects in the young generation heap memory are removed.
+				Major or Full Garbage Collection: It is said to have occurred when the objects that survived the minor garbage collection are copied into the old generation or permanent generation heap memory are removed. When compared to the young generation, garbage collection happens less frequently in the old generation.
+			Finalization
+				Just before destroying an object, Garbage Collector calls finalize() method on the object to perform cleanup activities. Once finalize() method completes, Garbage Collector destroys that object.
+				finalize() method is present in Object class: protected void finalize() throws Throwable
+				Based on our requirement, we can override finalize() method for performing our cleanup activities like closing connection from the database.
+					The finalize() method is called by Garbage Collector, not JVM. However, Garbage Collector is one of the modules of JVM.
+					Object class finalize() method has an empty implementation. Thus, it is recommended to override the finalize() method to dispose of system resources or perform other cleanups.
+					The finalize() method is never invoked more than once for any object.
+					If an uncaught exception is thrown by the finalize() method, the exception is ignored, and the finalization of that object terminates.
+				Example
+			garbage collector use Mark and Sweep algorithm to clear unused memory.
+			Each garbage collector will vary in Application throughput and Application pause
+			types
+				Serial Garbage Collector
+					This is the simplest GC implementation, as it basically works with a single thread.t freezes all other running threads of application until garbage collection operations have concluded.
+					Implementation
+					java -XX:+UseSerialGC -jar GFGApplicationJar.java
+				Parallel Garbage Collector
+					Parallel Garbage Collector is the default garbage collector in Java 8. It is also known as Throughput collector. Parallel Garbage Collector also freezes the running threads of the application while performing the garbage collection. But the difference is, Parallel Garbage Collector uses multiple threads to perform cleaning of unused heap area.
+					Implementation
+						java -XX:+UseParallelGC -jar GFGApplicationJar.java
+					The advantage of using Garbage Collector as default GC is we can mention few attributes
+						How many threads
+							Implementation
+								java -XX:+UseParallelGC -XX:ParallelGCThreads=NumberOfThreads -jar GFGApplicationJar.java
+						Maximum pause
+							Implementation
+								java -XX:+UseParallelGC -XX:MaxGCPauseMillis=SecInMillisecond -jar GFGApplicationJar.java
+				CMS Garbage collector
+					CMS Garbage collector is known as concurrent mark-sweep garbage collector. This garbage collector uses multiple threads to scan the heap memory consistently to the mark objects that are unused and then sweep the marked objects.
+					CMS Garbage collector will perform freezing of running threads i.e. application pause in two cases only:
+						While performing the garbage collection, If there is a change in heap memory in parallel.
+						While marking the referenced objects in the old generation space.
+					If we compare CMS collector with Parallel garbage collector, CMS collector uses more CPU to ensure better application throughput.
+					Implementation
+						java -XX:+UseParNewGC -jar GFGApplicationJar.java
+				G1 Garbage Collector
+					Firstly G1 Garbage Collector is introduced in JDK 7. Initially, It was designed to provide better support for larger heap memory application. G1 Garbage Collector is the default garbage collection of Java 9. G1 collector replaced the CMS collector since it’s more performance efficient. How G1 Garbage Collector works is different from other collectors. Unlike other collectors, the G1 collector partitions the heap space into multiple equal-sized regions. Basically it is mainly designed for an application having heap size greater than 4GB. It divides the heap area into multiple regions vary from 1MB to 32MB. While performing the garbage collection, G1 Garbage Collector mark the heap region which has objects that are in use throughout the heap. By the help of this garbage collector has the information about the regions that contains most use less objects and garbage collector first perform the garbage collection on that region only. Thats why it is known as G first garbage collector. G1 also does compact the free heap space just after garbage collection that makes G1 Garbage Collector better than other garbage collectors. G1 Garbage Collector is the default garbage collector of Java 9.
+					Implementation
+						java -XX:+UseG1GC -jar GFGApplicationJar.java
+		 stored in memory
+			 when we allocate the object using new(), the object is allocated on Heap, otherwise on Stack if not global or static.
+			 two ways to create an object  of string in java:
+				By string literal
+				By new keyword
+			Stack Allocation
+				The allocation happens on contiguous blocks of memory. We call it a stack memory allocation because the allocation happens in the function call stack. The size of memory to be allocated is known to the compiler and whenever a function is called, its variables get memory allocated on the stack. And whenever the function call is over, the memory for the variables is de-allocated.
+				Each thread has a private JVM stack, created at the same time as the thread.
+				Java Stack stores frames
+				This kind of memory allocation is also known as Temporary memory allocation because as soon as the method finishes its execution all the data belonging to that method flushes out from the stack automatically. This means any value stored in the stack memory scheme is accessible as long as the method hasn’t completed its execution and is currently in a running state.
+				We receive the corresponding error Java. lang. StackOverFlowError by JVM, If the stack memory is filled completely.
+				Stack memory allocation is considered safer as compared to heap memory allocation because the data stored can only be accessed by the owner thread.
+				Memory allocation and de-allocation are faster as compared to Heap-memory allocation.
+				Stack memory has less storage space as compared to Heap-memory.
+				For every thread, JVM creates a separate stack at the time of thread creation. The memory for a Java Virtual Machine stack does not need to be contiguous. The Java virtual machine only performs two operations directly on Java stacks: it pushes and pops frames. And stack for a particular thread may be termed as Run – Time Stack.
+				After completing all method calls the stack becomes empty and that empty stack is destroyed by the JVM just before terminating the thread.
+				The data stored in the stack is available for the corresponding thread and not available to the remaining threads. Hence we can say local data thread-safe. Each entry in the stack is called Stack Frame or Activation Record.
+				Stack Frame
+					parts
+						Local Variable Array (LVA)
+							The local variables part of the stack frame is organized as a zero-based array of words.
+							It contains all parameters and local variables of the method.
+							Each slot or entry in the array is of 4 Bytes.
+							Values of type int, float, and reference occupy 1 entry or slot in the array i.e. 4 bytes.
+							Values of double and long occupy 2 consecutive entries in the array i.e. 8 bytes total.
+							Byte, short, and char values will be converted to int type before storing and occupy 1 slot i.e. 4 Bytes.
+							But the way of storing Boolean values is varied from JVM to JVM. But most of the JVM gives 1 slot for Boolean values in the local variable array.
+							The parameters are placed into the local variable array first, in the order in which they are declared.
+						Operand Stack (OS):
+							JVM uses operand stack as workspace like rough work or we can say for storing intermediate calculation’s result.
+							The operand stack is organized as an array of words like a local variable array. But this is not accessed by using an index like local variable array rather it is accessed by some instructions that can push the value to the operand stack and some instructions that can pop values from the operand stack and some instructions that can perform required operations.
+							Example
+						Frame Data (FD):
+							It contains all symbolic references (constant pool resolution) and normal method returns related to that particular method.
+							It also contains a reference to the Exception table which provides the corresponding catch block information in the case of exceptions.
+			Heap Allocation
+				If a programmer does not handle this memory well, a memory leak can happen in the program.
+				Memory leaks
+					creates lots of objects and does not use them.
+					Such types of useless objects are called as Memory leaks. If allocated memory goes beyond limit, program will be terminated by rising OutOfMemoryError.
+					use some tools that do memory management to identifies useless objects or memory leaks like
+						HP OVO
+						HP J METER
+						JProbe
+						IBM Tivoli
+				three categories
+					Young Generation – It’s the portion of the memory where all the new data(objects) are made to allocate the space and whenever this memory is completely filled then the rest of the data is stored in Garbage collection.
+					Old or Tenured Generation – This is the part of Heap-memory that contains the older data objects that are not in frequent use or not in use at all are placed.
+					Permanent Generation – This is the portion of Heap-memory that contains the JVM’s metadata for the runtime classes and application methods.
+				We receive the corresponding error message if Heap-space is entirely full,  java. lang.OutOfMemoryError by JVM.
+				This memory allocation scheme is different from the Stack-space allocation, here no automatic de-allocation feature is provided. We need to use a Garbage collector to remove the old unused objects in order to use the memory efficiently.
+				Heap memory is accessible or exists as long as the whole application(or java program) runs.
+			Between Stack and Heap Allocations
+				In a stack, the allocation and de-allocation are automatically done by the compiler whereas, in heap, it needs to be done by the programmer manually.
+				Handling the Heap frame is costlier than handling the stack frame.
+				Memory shortage problem is more likely to happen in stack whereas the main issue in heap memory is fragmentation.
+				Stack frame access is easier than the heap frame as the stack has a small region of memory and is cache-friendly but in the case of heap frames which are dispersed throughout the memory so it causes more cache misses.
+				A stack is not flexible, the memory size allotted cannot be changed whereas a heap is flexible, and the allotted memory can be altered.
+				Accessing the time of heap takes is more than a stack
+				Parameter						STACK														HEAP
+				Basic							Memory is allocated in a contiguous block.					Memory is allocated in any random order.
+				Allocation and De-allocation	Automatic by compiler instructions.							Manual by the programmer.
+				Cost							Less														More
+				Implementation					Easy														Hard
+				Access time						Faster														Slower
+				Main Issue						Shortage of memory											Memory fragmentation
+				Locality of reference			Excellent													Adequate
+				Safety							Thread safe, data stored can only be accessed by the owner	Not Thread safe, data stored visible to all threads
+				Flexibility						Fixed-size													Resizing is possible
+				Data type structure				Linear														Hierarchical
+				Preferred						Static memory allocation is preferred in an array.			Heap memory allocation is preferred in the linked list.
+				Size							Small than heap memory.										Larger than stack memory.
+		JVM
+			JVM (Java Virtual Machine) is an abstract machine, In other words, it is a program/software which takes Java bytecode and converts the byte code (line by line) into machine understandable code.
+			JVM(Java Virtual Machine) acts as a run-time engine to run Java applications. JVM is the one that actually calls the main method present in Java code
+			types of operations:
+				Loading of code
+				Verification of code
+				Executing the code
+				It provides a run-time environment to the users
+			ClassLoader
+				It is a subsystem of JVM which is used to load class files. It is mainly responsible for three activities.
+					Loading
+					Linking
+					Initialization

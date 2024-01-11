@@ -1,5 +1,5 @@
 package edu.mypackage;
 
-public class Alive {
+public class Alive{
 
 }

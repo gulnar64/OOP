@@ -1,20 +1,27 @@
 package edu.mypackage;
 
-public class Employer extends Person implements Runable, Eatable {
+public class Employer extends Person {
     private int i;
     private Employer employer;
 
     public static void main(String[] args) {
-
+        Employer employer1 = new Employer();
+        Person person = new Employer();
+        employer1.publicMethod();
     }
+
+//    @Override
+//    public void publicMethod() {
+//        super.publicMethod();
+//    }
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
 
-    public static Employer createObject() {
-        return new Employer();
+    public  Employer createObject() {
+        return this;
     }
 
     public static Employer createObject(Employer employer) {
@@ -22,21 +29,21 @@ public class Employer extends Person implements Runable, Eatable {
     }
 
 
-    public Employer() {
-        super(5);
-        System.out.println("no parameter");
-    }
+//    public Employer() {
+//        super(5);
+//        System.out.println("no parameter");
+//    }
 
-    public Employer(Employer employer) {
-        this();
-        System.out.println("employer parameter");
-        this.employer = employer;
-    }
-
-    public Employer(int i) {
-        System.out.println("i parameter");
-        this.i = i;
-    }
+//    public Employer(Employer employer) {
+//        this();
+//        System.out.println("employer parameter");
+//        this.employer = employer;
+//    }
+//
+//    public Employer(int i) {
+//        System.out.println("i parameter");
+//        this.i = i;
+//    }
 
     class Engeneer {
         public void method() {
